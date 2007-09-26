@@ -1,0 +1,29 @@
+/**
+ * CSS for DokuWiki Syntax Plugin Gpsies
+
+ * @author:     Michael Klier <chi@chimeric.de>
+ * @homepage:   http://www.chimeric.de
+ */
+
+div.dokuwiki div.plugin_gpsies {
+  margin: 1em 1em;
+  float: left;
+  clear: both;
+  padding: 0.5em  0.5em 0 0.5em;
+  border: 1px solid __border__;
+}
+
+div.dokuwiki div.plugin_gpsies iframe {
+  float: left;
+  margin-top: 0.5em;
+}
+
+div.dokuwiki div.plugin_gpsies_header {
+  padding: 0.2em;
+  background: __background_neu__;
+}
+
+div.dokuwiki a.plugin_gpsies {
+  background: url(images/gpsies.png) no-repeat left;
+  padding-left: 19px;
+}
