@@ -32,7 +32,7 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-09-26',
+            'date'   => '2007-10-29',
             'name'   => 'Gpsies',
             'desc'   => 'Embeds a track from gpsies into a dokuwiki page.',
             'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gpsies'
@@ -59,9 +59,21 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
      * Handler to prepare matched data for the rendering process
      */
     function handle($match, $state, $pos, &$handler){
-        global $ID;
         $match = substr($match,9,-2); //strip {{gpsies> from start and }} from end
-        return array($match);
+
+        list($track,$params) = explode('?',$match,2);
+        $data['track'] = $track;
+
+        //get dimensions
+        if(preg_match('/\b(\d+)x(\d+)\b/',$params,$match)){
+            $data['w'] = $match[1];
+            $data['h'] = $match[2];
+        }else{
+            $data['w'] = 400;
+            $data['h'] = 400;
+        }
+
+        return $data;
     }
 
     /**
@@ -73,7 +85,7 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
         if($mode == 'xhtml'){
             // disable caching
             $renderer->info['cache'] = false;
-            $renderer->doc .= $this->gpsies_xhtml($data[0]);
+            $renderer->doc .= $this->gpsies_xhtml($data);
             return true;
         }
         return false;
@@ -84,15 +96,21 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
      *
      * @author Michael Klier <chi@chimeric.de>
      */
-    function gpsies_xhtml($track) {
+    function gpsies_xhtml($data) {
+        $trackURL            = 'http://gpsies.de/mapOnly.do?fileId=' . $data['track'];
+        $trackMapURL         = 'http://gpsies.com/map.do?fileId=' . $data['track'];
+        $trackMapOnlyURL     = 'http://gpsies.com/mapOnly.do?fileId=' . $data['track'];
+        $trackAltitudeImgURL = 'http://gpsies.de/charts/' . $data['track'] . '_map.png';
+
         $out  = '<div class="plugin_gpsies">' . DOKU_LF;
         $out .= '  <div class="plugin_gpsies_header">' . DOKU_LF;
-        $out .= '    <a href="http://gpsies.com/map.do?fileId=' . $track . '" class="plugin_gpsies" title="' . $this->getLang('visit_track') . '">' . $this->getLang('visit_track') . '</a>' . DOKU_LF;
+        $out .= '    <a href="' . $trackMapURL . '" class="plugin_gpsies" title="' . $this->getLang('visit_track') . '">' . $this->getLang('visit_track') . '</a>' . DOKU_LF;
         $out .= ' &middot; ';
-        $out .= '<a href="http://gpsies.com/mapOnly.do?fileId=' . $track . '" target="_blank" title="' . $this->getLang('fullscreen') . '">' . $this->getLang('fullscreen') . '</a>';
+        $out .= '<a href="' . $trackMapOnlyURL . '" target="_blank" title="' . $this->getLang('fullscreen') . '">' . $this->getLang('fullscreen') . '</a>';
         $out .= '  </div>' . DOKU_LF;
-        $out .= '    <iframe src="http://gpsies.de/mapOnly.do?fileId=' . $track . '" width="500" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="GPSies - Heidenheim - Ötterlesbrunnen - Eselsburger Tal - Ugental - Heidenheim"></iframe>' . DOKU_LF;
-        $out .= '    <img src="http://gpsies.de/charts/' . $track . '_map.png" alt="http://gpsies.com/map.do?fileId=' . $track . '" />' . DOKU_LF;
+        $out .= '    <iframe src="' . $trackURL . '" width="'. $data['w'] . '" height="' . $data['h'] . '" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="' . $trackMapURL . '"></iframe>' . DOKU_LF;
+        $out .= '    <div class="clearer"></div>';
+        $out .= '    <img src="' . $trackAltitudeImgURL . '" alt="' . $trackMapURL . '" />' . DOKU_LF;
         $out .= '  <div class="plugin_gpsies_footer">' . DOKU_LF;
         $out .= '  </div>' . DOKU_LF;
         $out .= '</div>' . DOKU_LF;
