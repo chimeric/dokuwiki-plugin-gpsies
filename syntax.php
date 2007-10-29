@@ -69,8 +69,8 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
             $data['w'] = $match[1];
             $data['h'] = $match[2];
         }else{
-            $data['w'] = 400;
-            $data['h'] = 400;
+            $data['w'] = 500;
+            $data['h'] = 500;
         }
 
         return $data;
