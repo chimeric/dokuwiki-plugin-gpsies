@@ -32,10 +32,10 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
         return array(
             'author' => 'Michael Klier',
             'email'  => 'chi@chimeric.de',
-            'date'   => '2007-10-29',
+            'date'   => @file_get_contents(DOKU_PLUGIN.'gpsies/VERSION'),
             'name'   => 'Gpsies',
             'desc'   => 'Embeds a track from gpsies into a dokuwiki page.',
-            'url'    => 'http://www.chimeric.de/projects/dokuwiki/plugin/gpsies'
+            'url'    => 'http://dokuwiki.org/plugin:gpsies'
         );
     }
 
@@ -118,4 +118,4 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
     }
 }
 
-//setup vim:ts=4:sw=4:enc=utf-8:
+// vim:ts=4:sw=4:enc=utf-8:
