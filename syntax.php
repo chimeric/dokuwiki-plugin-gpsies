@@ -58,7 +58,7 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
     /**
      * Handler to prepare matched data for the rendering process
      */
-    function handle($match, $state, $pos, &$handler){
+    function handle($match, $state, $pos, Doku_Handler $handler){
         $match = substr($match,9,-2); //strip {{gpsies> from start and }} from end
 
         list($track,$params) = explode('?',$match,2);
@@ -79,7 +79,7 @@ class syntax_plugin_gpsies extends DokuWiki_Syntax_Plugin {
     /**
      * Handles the actual output creation.
      */
-    function render($mode, &$renderer, $data) {
+    function render($mode, Doku_Renderer $renderer, $data) {
         global $lang;
 
         if($mode == 'xhtml'){
